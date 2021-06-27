@@ -32,15 +32,14 @@ const store = new Vuex.Store({
           password: credentials.password,
         })
           .then(response => {
-            //console.log(response)
-            const token = response.data.token
-            const nombre = response.data.name
+            const token = response.data.data.token
+            const nombre = response.data.data.name
+            //console.log(response.data.data)
             localStorage.setItem('access_token', token)
             localStorage.setItem('usuario', nombre)
             context.commit('retrieveToken', token,nombre)
 
             resolve(response)
-            router.push({ name: 'Home' });
           })
           .catch(error => {
             //console.log(error)

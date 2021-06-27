@@ -43,10 +43,10 @@ export default {
           password: this.password
         })
         .then(response => {
-          this.$router.push({ name: "dashboard" });
+          this.$router.push({ name: "Home" });
         })
         .catch(error => {
-          this.error = error.response.data;
+          this.error = error.response.data.data;
         });
     }
   }

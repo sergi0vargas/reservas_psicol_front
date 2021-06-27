@@ -8,12 +8,12 @@ import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-axios.defaults.baseURL = 'http://localhost';
-
+window.axios = require('axios');
 Vue.use(axios);
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.config.productionTip = false
+axios.defaults.baseURL = 'http://localhost';
 
 router.beforeEach((to, from, next) => {
   

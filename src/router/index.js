@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
+import Logout from '../views/Logout.vue'
+import Home from '../views/Home.vue'
 import Clientes from '../views/Clientes.vue'
 import Eventos from '../views/Eventos.vue'
 
@@ -12,6 +13,14 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/logout',
+    name: 'logout',
+    component: Logout,
+    meta: {
+        requiresAuth: true,
+    }
   },
   {
     path: '/home',
