@@ -6,7 +6,7 @@
       <router-link v-if="$store.getters.loggedIn" class="btn btn-primary" to="/home">Inicio</router-link>
       <router-link v-if="$store.getters.loggedIn" class="btn btn-primary" to="/clientes">Gestion Clientes</router-link>
       <router-link v-if="$store.getters.loggedIn" class="btn btn-primary" to="/eventos">Gestion Eventos</router-link>
-      <router-link v-if="$store.getters.loggedIn" class="btn btn-primary" to="/logout">Logout</router-link>
+      <router-link v-if="$store.getters.loggedIn" class="btn btn-primary" to="/logout">{{nombre}} - Logout</router-link>
     </div>
     <router-view/>
   </div>
@@ -24,3 +24,13 @@
 }
 
 </style>
+
+<script>
+export default {
+  data(){
+    return{
+      nombre:localStorage.getItem('usuario'),
+    }
+  },
+};
+</script>

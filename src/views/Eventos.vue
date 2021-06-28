@@ -14,15 +14,15 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(evento,index) in eventos" :key="index">
+          <tr v-for="evento in eventos" :key="evento.id">
             <td>{{ evento.titulo }}</td>
             <td>{{ evento.descripcion }}</td>
             <td>{{ evento.fecha_evento }}</td>
             <td>{{ evento.aforo }}</td>
-            <td v-if="evento.vendidas < evento.aforo" class="bg-success">{{ evento.vendidas }}</td>
-            <td v-else class="bg-warning">{{ evento.vendidas }}</td>
+            <td v-if="evento.vendidas < evento.aforo" class="bg-success">{{ evento.aforo-evento.vendidas }}</td>
+            <td v-else class="bg-warning">{{ evento.aforo-evento.vendidas }}</td>
             <td><button class="btn btn-primary">Editar</button>
-            <button v-on:click="deleteEvento(index);"  class="btn btn-danger">Eliminar</button></td>
+            <button v-on:click="deleteEvento(evento.id);"  class="btn btn-danger">Eliminar</button></td>
           </tr>
         </tbody>
       </table>
@@ -33,21 +33,21 @@
           <form>
             <div class="form-group">
               <label for="titulo">Titulo Evento</label>
-              <input type="text" class="form-control" v-bind="titulo" placeholder="Desfile 1">
+              <input type="text" class="form-control" v-model="titulo" placeholder="Desfile 1">
             </div>
             <div class="form-group">
               <label for="descripcion">Descripcion Evento</label>
-              <input type="text" class="form-control" v-bind="descripcion"  placeholder="de que trata el evento....">
+              <input type="text" class="form-control" v-model="descripcion"  placeholder="de que trata el evento....">
             </div>
             <div class="form-group">
               <label for="capacidad">Capacidad Maxima Evento</label>
-              <input type="number" class="form-control" v-bind="aforo"  placeholder="10">
+              <input type="number" class="form-control" v-model="aforo"  placeholder="10">
             </div>
             <div class="form-group">
               <label for="fecha_evento">Fecha Evento</label>
-              <input type="date" class="form-control" v-bind="fecha_evento"  placeholder="Desfile 1">
+              <input type="date" class="form-control" v-model="fecha_evento"  placeholder="Desfile 1">
             </div>
-            <button  v-on:click="crearEvento(index);"  class="btn btn-primary">Guardar</button>
+            <button  v-on:click="crearEvento();"  class="btn btn-primary">Guardar</button>
           </form>
         </div>
       </div>
@@ -64,7 +64,11 @@ export default {
       descripcion: null,
       fecha_evento: null,
       aforo: null,
-      vendidas: 0
+      vendidas: 0,
+      headers : {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+      }
     }
   },
   created () {
@@ -76,9 +80,7 @@ export default {
   methods: {
     getEventos() {
       axios.get('/api/eventos',{
-          headers: {
-             Authorization: 'Bearer ' + localStorage.getItem('access_token')
-           }
+          headers:this.headers
         })
         .then(response => { 
               this.eventos = response['data'].data;
@@ -88,20 +90,30 @@ export default {
         });
     },
     deleteEvento($id) {
-      console.log($id)
+      axios.delete('/api/eventos/'+$id,
+        {
+          headers:this.headers
+        })
+        .then(response => { 
+            this.getEventos()
+            console.log(response)
+          })
+        .catch(response => {
+            console.log(response)
+        });
     },
     crearEvento(){
       axios.post('/api/eventos',{
-          headers: {
-            Authorization: 'Bearer ' + localStorage.getItem('access_token')
-          },
-          titulo: this.titulo,
-          descripcion: this.descripcion,
-          fecha_evento: this.fecha_evento,
-          aforo: this.aforo,
-          vendidas: 0
+        titulo: this.titulo,
+        descripcion: this.descripcion,
+        fecha_evento: this.fecha_evento,
+        aforo: this.aforo,
+        vendidas: 0},
+        {
+          headers: this.headers
         })
         .then(response => { 
+          this.eventos.push(response.data.data)
               console.log(response)
           })
         .catch(response => {
