@@ -25,7 +25,7 @@ Frontend utilizando VUE
 npm install
 npm run serve
 ```
-Cambiar baseURL de axios segun corresponda (si se corre el backend con artisan el puerto debe cambiar a 8000)
+Cambiar baseURL de axios en src/main.js linea 16 segun corresponda (si se corre el backend con artisan el puerto debe cambiar a 8000)
 USUARIO DE PRUEBAS
 ```
 sergiovargas9@gmail.com
