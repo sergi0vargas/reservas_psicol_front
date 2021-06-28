@@ -149,7 +149,7 @@ export default {
           headers: this.headers
         })
         .then(response => { 
-          this.clientes.push(response.data.data)
+          this.getClientes()
               console.log(response)
           })
         .catch(response => {

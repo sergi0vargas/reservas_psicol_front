@@ -13,7 +13,7 @@ Vue.use(axios);
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.config.productionTip = false
-axios.defaults.baseURL = 'http://localhost';
+axios.defaults.baseURL = 'http://localhost:8000';
 
 router.beforeEach((to, from, next) => {
   
