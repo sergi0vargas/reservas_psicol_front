@@ -2,7 +2,7 @@
 
 # Proyecto Sergio Vargas - Prueba Psicol FRONTEND
 
-backend en laravel 8 usando passport
+Frontend utilizando VUE
 
 ## Reto: Sistema de reserva de Boletas
 
