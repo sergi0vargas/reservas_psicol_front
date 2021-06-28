@@ -21,8 +21,8 @@
             <td>{{ evento.aforo }}</td>
             <td v-if="evento.vendidas < evento.aforo" class="bg-success">{{ evento.aforo-evento.vendidas }}</td>
             <td v-else class="bg-warning">{{ evento.aforo-evento.vendidas }}</td>
-            <td><button class="btn btn-primary">Editar</button>
-            <button v-on:click="deleteEvento(evento.id);"  class="btn btn-danger">Eliminar</button></td>
+            <td><button v-b-modal.modal-1 v-on:click="cargarDatosEvento(evento)" class="btn btn-primary">Editar</button>
+            <button v-on:click="deleteEvento(evento.id);" class="btn btn-danger">Eliminar</button></td>
           </tr>
         </tbody>
       </table>
@@ -51,6 +51,29 @@
           </form>
         </div>
       </div>
+      <div>
+        <b-modal id="modal-1" title="Editar Evento">
+          <form>
+            <div class="form-group">
+              <label for="titulo">Titulo Evento</label>
+              <input type="text" class="form-control" v-model="titulo" placeholder="">
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripcion Evento</label>
+              <input type="text" class="form-control" v-model="descripcion"  placeholder="">
+            </div>
+            <div class="form-group">
+              <label for="capacidad">Capacidad Maxima Evento</label>
+              <input type="number" class="form-control" v-model="aforo"  placeholder="">
+            </div>
+            <div class="form-group">
+              <label for="fecha_evento">Fecha Evento</label>
+              <input type="date" class="form-control" v-model="fecha_evento"  placeholder="">
+            </div>
+            <button  v-on:click="actualizarEvento();" @click="$bvModal.hide('modal-1')" class="btn btn-primary">Guardar</button>
+          </form>
+        </b-modal>
+      </div>
   </div>
 </template>
 
@@ -60,6 +83,8 @@ export default {
   data(){
     return{
       eventos:[],
+      eventoAModificar: null,
+      id: null,
       titulo: null,
       descripcion: null,
       fecha_evento: null,
@@ -96,7 +121,7 @@ export default {
         })
         .then(response => { 
             this.getEventos()
-            console.log(response)
+            //console.log(response)
           })
         .catch(response => {
             console.log(response)
@@ -114,11 +139,45 @@ export default {
         })
         .then(response => { 
           this.eventos.push(response.data.data)
-              console.log(response)
+          //console.log(response)
           })
         .catch(response => {
             console.log(response)
         });
+    },
+    actualizarEvento(){
+      this.eventoAModificar.titulo = this.titulo;
+      this.eventoAModificar.descripcion = this.descripcion;
+      this.eventoAModificar.fecha_evento = this.fecha_evento;
+      this.eventoAModificar.aforo = this.aforo;
+
+      let consulta = +this.id+'?titulo='+this.titulo+'&descripcion='+this.descripcion+'&fecha_evento='+this.fecha_evento+'&aforo='+this.aforo;
+      axios.put('/api/eventos/'+consulta,this.eventoAModificar,
+        {
+          headers: this.headers
+        })
+        .then(response => { 
+          this.getEventos();
+          //console.log(response)
+          this.eventoAModificar= null;
+          this.id= null;
+          this.titulo= null;
+          this.descripcion= null;
+          this.fecha_evento= null;
+          this.aforo= null;
+          })
+        .catch(response => {
+            console.log(response)
+        });
+    },
+    cargarDatosEvento(evento){
+      this.eventoAModificar = evento;
+      this.id = evento.id,
+      this.titulo = evento.titulo,
+      this.descripcion = evento.descripcion,
+      this.fecha_evento = new Date(evento.fecha_evento),
+      this.aforo = evento.aforo,
+      this.vendidas = evento.vendidas
     }
   }
 }

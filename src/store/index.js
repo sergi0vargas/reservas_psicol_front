@@ -49,7 +49,7 @@ const store = new Vuex.Store({
 
     },
     destroyToken(context) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("access_token");
         localStorage.removeItem("usuario");
         context.commit("destroyToken", null);
         router.push({ name: 'login' });
